@@ -43,8 +43,15 @@ function App() {
     getTasksFromLocalStorage();
   },[])
 
-  const editTask = ()=>{
-
+  const editTask = (id, data)=>{
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        return { ...task, name: data };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
   }
   const deleteTask = (id)=>{
     const filteredTasks = tasks.filter(task => task.id !== id);
