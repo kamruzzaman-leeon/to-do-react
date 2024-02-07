@@ -2,6 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { useEffect } from 'react';
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -20,17 +21,33 @@ function App() {
     };
 
     // Update the tasks state array with the new task
-    setTasks([...tasks, newTask]);
+    setTasks(prevTasks => [...prevTasks, newTask]);
 
     // Clear input fields after adding task
     setTaskData('');
     setPriority('low');
+
+    //save the tasks to local storage
+    localStorage.setItem('tasks',JSON.stringify([...tasks,newTask]));
   };
+  // Function to get tasks from local storage
+  useEffect(()=>{
+    const getTasksFromLocalStorage = () => {
+      const storedTasks = localStorage.getItem('tasks');
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
+    };
+
+    //caall the function to fetch data from localstorage
+    getTasksFromLocalStorage();
+  },[])
+
+
   
   return (
 
     <>
-   
       <h1>To Do List</h1>
       <div className="card">
         <div>Total Task: {tasks.length}</div>
@@ -50,25 +67,36 @@ function App() {
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
-          <button type="submit">Add</button> {/* Changed onClick to onSubmit */}
+          <button type="submit">Add</button>
         </form>
       </div>
 
-      {/* Display tasks that user added. N.B */}
-      <table>
-        <tr><th>#</th>
-        <th>tasks</th>
-        <th>priority</th>
-        <th>Action</th></tr>
-        {tasks.map((task,index) => (
-          <tr key={task.id}>
-            <td>{index+1}</td>
-            <td>{task.name}</td>
-            <td>{task.priority}</td>
-            <td><button>Complete</button> <button>Delete</button></td>
-          </tr>
-        ))}
-      </table>
+      {/* Display tasks from state */}
+      <div className="task-list">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Task</th>
+              <th>Priority</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tasks.map((task, index) => (
+              <tr key={task.id}>
+                <td>{index + 1}</td>
+                <td>{task.name}</td>
+                <td>{task.priority}</td>
+                <td>
+                  <button>Complete</button>
+                  <button>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   )
 }
