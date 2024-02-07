@@ -43,6 +43,13 @@ function App() {
     getTasksFromLocalStorage();
   },[])
 
+  const editTask = ()=>{
+
+  }
+  const deleteTask = (id)=>{
+    const filteredTasks = tasks.filter(task => task.id !== id);
+    setTasks(filteredTasks);
+  }
 
   
   return (
@@ -86,11 +93,12 @@ function App() {
             {tasks.map((task, index) => (
               <tr key={task.id}>
                 <td>{index + 1}</td>
-                <td>{task.name}</td>
+                <td><input type="text" defaultValue={task.name} onBlur={(e) => editTask(task.id, e.target.value)} /></td>
                 <td>{task.priority}</td>
                 <td>
                   <button>Complete</button>
-                  <button>Delete</button>
+                  <button onClick={() => deleteTask(task.id)}>Delete</button>
+                
                 </td>
               </tr>
             ))}
