@@ -53,6 +53,22 @@ function App() {
           <button type="submit">Add</button> {/* Changed onClick to onSubmit */}
         </form>
       </div>
+
+      {/* Display tasks that user added. N.B */}
+      <table>
+        <tr><th>#</th>
+        <th>tasks</th>
+        <th>priority</th>
+        <th>Action</th></tr>
+        {tasks.map((task,index) => (
+          <tr key={task.id}>
+            <td>{index+1}</td>
+            <td>{task.name}</td>
+            <td>{task.priority}</td>
+            <td><button>Complete</button> <button>Delete</button></td>
+          </tr>
+        ))}
+      </table>
     </>
   )
 }
