@@ -9,6 +9,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [taskData, setTaskData] = useState('');
   const [priority, setPriority] = useState('low');
+  const [filterPriority,setFilterPriority]=useState('all')
 
   const addTask = e => {
     e.preventDefault()
@@ -17,7 +18,8 @@ function App() {
     const newTask = {
       id: tasks.length + 1, // Assuming each task has a unique ID
       name: taskData,
-      priority: priority
+      priority: priority,
+      completed: false,
     };
 
     // Update the tasks state array with the new task
@@ -70,6 +72,8 @@ function App() {
     // Update local storage with the updated tasks
     localStorage.setItem('tasks', JSON.stringify(updatedTasks));
   }
+
+  const filteredTasks = filterPriority === 'all' ? tasks : tasks.filter(task => task.priority === filterPriority);
   return (
 
     <>
@@ -96,6 +100,16 @@ function App() {
         </form>
       </div>
 
+      <div>
+          <label>Filter by Priority:</label>
+          <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)}>
+            <option value="all">All</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
       {/* Display tasks from state */}
       <div>
         <table>
@@ -108,7 +122,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task, index) => (
+            {filteredTasks.map((task, index) => (
               <tr key={task.id}>
                 <td>{index + 1}</td>
                 <td><input type="text" defaultValue={task.name} onBlur={(e) => editTask(task.id, e.target.value)} /></td>
