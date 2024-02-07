@@ -6,11 +6,11 @@ import { useEffect } from 'react';
 
 function App() {
   // const [count, setCount] = useState(0)
-  const [tasks,setTasks]=useState([]);
-  const [taskData,setTaskData]=useState('');
-  const [priority,setPriority]=useState('low');
+  const [tasks, setTasks] = useState([]);
+  const [taskData, setTaskData] = useState('');
+  const [priority, setPriority] = useState('low');
 
-  const addTask = e =>{
+  const addTask = e => {
     e.preventDefault()
     console.log(e);
 
@@ -28,10 +28,10 @@ function App() {
     setPriority('low');
 
     //save the tasks to local storage
-    localStorage.setItem('tasks',JSON.stringify([...tasks,newTask]));
+    localStorage.setItem('tasks', JSON.stringify([...tasks, newTask]));
   };
   // Function to get tasks from local storage
-  useEffect(()=>{
+  useEffect(() => {
     const getTasksFromLocalStorage = () => {
       const storedTasks = localStorage.getItem('tasks');
       if (storedTasks) {
@@ -41,9 +41,9 @@ function App() {
 
     //caall the function to fetch data from localstorage
     getTasksFromLocalStorage();
-  },[])
+  }, [])
 
-  const editTask = (id, data)=>{
+  const editTask = (id, data) => {
     const updatedTasks = tasks.map(task => {
       if (task.id === id) {
         return { ...task, name: data };
@@ -53,12 +53,23 @@ function App() {
     setTasks(updatedTasks);
     localStorage.setItem('tasks', JSON.stringify(updatedTasks));
   }
-  const deleteTask = (id)=>{
+  const deleteTask = (id) => {
     const filteredTasks = tasks.filter(task => task.id !== id);
     setTasks(filteredTasks);
   }
 
-  
+  const toggleComplete = (id) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        return { ...task, completed: !task.completed };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+
+    // Update local storage with the updated tasks
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+  }
   return (
 
     <>
@@ -86,14 +97,14 @@ function App() {
       </div>
 
       {/* Display tasks from state */}
-      <div className="task-list">
+      <div>
         <table>
           <thead>
             <tr>
               <th>#</th>
               <th>Task</th>
               <th>Priority</th>
-              <th>Action</th>
+              <th colSpan={2} >Action</th>
             </tr>
           </thead>
           <tbody>
@@ -103,9 +114,12 @@ function App() {
                 <td><input type="text" defaultValue={task.name} onBlur={(e) => editTask(task.id, e.target.value)} /></td>
                 <td>{task.priority}</td>
                 <td>
-                  <button>Complete</button>
+                <button onClick={() => toggleComplete(task.id)} disabled={task.completed}>
+    {task.completed ? 'Completed' : 'Complete'}
+  </button>
+                </td>
+                <td>
                   <button onClick={() => deleteTask(task.id)}>Delete</button>
-                
                 </td>
               </tr>
             ))}
