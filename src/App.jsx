@@ -76,7 +76,7 @@ function App() {
       <h1>To Do List</h1>
       <div className="card">
         <div>Total Task: {tasks.length}</div>
-        <div>Complete Task:</div>
+        <div>Complete Task: {tasks.filter(task => task.completed).length}</div>
         <form onSubmit={addTask}>
           <input
             type="text"
@@ -112,7 +112,7 @@ function App() {
               <tr key={task.id}>
                 <td>{index + 1}</td>
                 <td><input type="text" defaultValue={task.name} onBlur={(e) => editTask(task.id, e.target.value)} /></td>
-                <td>{task.priority}</td>
+                <td><span style={{ backgroundColor: task.priority === 'low' ? 'green' : task.priority === 'medium' ? 'orange' : 'red' }}>{task.priority}</span></td>
                 <td>
                 <button onClick={() => toggleComplete(task.id)}>
     {task.completed ? 'Completed' : 'Complete'}
