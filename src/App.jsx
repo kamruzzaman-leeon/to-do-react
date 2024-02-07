@@ -114,7 +114,7 @@ function App() {
                 <td><input type="text" defaultValue={task.name} onBlur={(e) => editTask(task.id, e.target.value)} /></td>
                 <td>{task.priority}</td>
                 <td>
-                <button onClick={() => toggleComplete(task.id)} disabled={task.completed}>
+                <button onClick={() => toggleComplete(task.id)}>
     {task.completed ? 'Completed' : 'Complete'}
   </button>
                 </td>
