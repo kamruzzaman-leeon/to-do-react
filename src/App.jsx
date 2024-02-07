@@ -9,7 +9,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [taskData, setTaskData] = useState('');
   const [priority, setPriority] = useState('low');
-  const [filterPriority,setFilterPriority]=useState('all')
+  const [filterPriority, setFilterPriority] = useState('all')
 
   const addTask = e => {
     e.preventDefault()
@@ -58,6 +58,8 @@ function App() {
   const deleteTask = (id) => {
     const filteredTasks = tasks.filter(task => task.id !== id);
     setTasks(filteredTasks);
+    // Remove the task from local storage
+    localStorage.setItem('tasks', JSON.stringify(filteredTasks));
   }
 
   const toggleComplete = (id) => {
@@ -101,14 +103,14 @@ function App() {
       </div>
 
       <div>
-          <label>Filter by Priority:</label>
-          <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)}>
-            <option value="all">All</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
+        <label>Filter by Priority:</label>
+        <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)}>
+          <option value="all">All</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
 
       {/* Display tasks from state */}
       <div>
@@ -128,9 +130,9 @@ function App() {
                 <td><input type="text" defaultValue={task.name} onBlur={(e) => editTask(task.id, e.target.value)} /></td>
                 <td><span style={{ backgroundColor: task.priority === 'low' ? 'green' : task.priority === 'medium' ? 'orange' : 'red' }}>{task.priority}</span></td>
                 <td>
-                <button onClick={() => toggleComplete(task.id)}>
-    {task.completed ? 'Completed' : 'Complete'}
-  </button>
+                  <button onClick={() => toggleComplete(task.id)}>
+                    {task.completed ? 'Completed' : 'Complete'}
+                  </button>
                 </td>
                 <td>
                   <button onClick={() => deleteTask(task.id)}>Delete</button>
